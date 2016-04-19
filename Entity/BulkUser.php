@@ -7,27 +7,37 @@ class BulkUser implements BulkInterface
     /** @var int */
     private $id;
 
-    /** @var string */
+    /** @var string|null */
     private $name;
 
-    /** @var string */
+    /** @var string|null */
     private $email;
 
     /** @var \DateTime */
     private $createdAt;
+
+    /** @var \DateTime|null */
+    private $lastActivity;
 
     /** @var array */
     private $customAttributes = [];
 
     /**
      * @param int $id
-     * @param string $name
-     * @param string $email
-     * @param \DateTime $createdAt
+     * @param string|null $name
+     * @param string|null $email
+     * @param \DateTime|null $createdAt
+     * @param \DateTime|null $lastActivity
      * @param array $customAttributes
      */
-    public function __construct($id, $name, $email, \DateTime $createdAt, array $customAttributes = [])
-    {
+    public function __construct(
+        $id,
+        $name = null,
+        $email = null,
+        \DateTime $createdAt = null,
+        \DateTime $lastActivity = null,
+        array $customAttributes = []
+    ) {
         \Assert\that($id)
             ->numeric('User ID have to be number')
             ->greaterThan(0, 'User ID have to be bigger then 0.');
@@ -36,6 +46,7 @@ class BulkUser implements BulkInterface
         $this->name = $name;
         $this->email = $email;
         $this->createdAt = $createdAt;
+        $this->lastActivity = $lastActivity;
         $this->customAttributes = $customAttributes;
     }
 
@@ -44,24 +55,34 @@ class BulkUser implements BulkInterface
      */
     public function toArray()
     {
-        $user = [
-            'data_type' => 'user',
-            'method' => 'post',
-            'data' => [
-                'user_id' => $this->id,
-                'name' => $this->name,
-                'signed_up_at' => $this->createdAt->format(self::TIME_FORMAT),
-            ],
+        $userData = [
+            'user_id' => $this->id,
         ];
 
+        if (!empty($this->name)) {
+            $userData['name'] = $this->name;
+        }
+
         if (!empty($this->email)) {
-            $user['data']['email'] = $this->email;
+            $userData['email'] = $this->email;
+        }
+
+        if (!empty($this->createdAt)) {
+            $userData['signed_up_at'] = (int) $this->createdAt->format(self::TIME_FORMAT);
+        }
+
+        if (!empty($this->lastActivity)) {
+            $userData['last_request_at'] = (int) $this->lastActivity->format(self::TIME_FORMAT);
         }
 
         if (!empty($this->customAttributes)) {
-            $user['data']['custom_attributes'] = $this->customAttributes;
+            $userData['custom_attributes'] = $this->customAttributes;
         }
 
-        return $user;
+        return [
+            'data_type' => 'user',
+            'method' => 'post',
+            'data' => $userData,
+        ];
     }
 }
