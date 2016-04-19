@@ -3,6 +3,7 @@
 namespace IntercomBundle\Service;
 
 use Assert\Assertion;
+use Guzzle\Service\Resource\Model;
 use Intercom\IntercomBasicAuthClient;
 
 class User implements ApiServiceInterface
@@ -70,5 +71,16 @@ class User implements ApiServiceInterface
         ];
 
         $this->intercomClient->createUser($userData);
+    }
+
+    /**
+     * @param int $page
+     * @return Model
+     */
+    public function getUsers($page = 1)
+    {
+        return $this->intercomClient->getUsers([
+            'page' => (int) $page,
+        ]);
     }
 }

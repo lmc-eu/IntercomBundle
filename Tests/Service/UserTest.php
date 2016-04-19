@@ -66,15 +66,15 @@ class UserTest extends AbstractTestCase
             ->with([
                 'user_id' => 12323,
                 'name' => 'John Snow II',
-                'signed_up_at' => 434930840,
-                'last_request_at' => 434930840,
+                'signed_up_at' => 1460726227,
+                'last_request_at' => 1460726227,
                 'custom_attributes' => [
                     'age' => 16,
                     'sex' => 'female',
                 ],
             ]);
 
-        $this->user->create(12323, 'John Snow II', '', 434930840, [
+        $this->user->create(12323, 'John Snow II', '', $this->dateTime(1460726227), [
             'age' => 16,
             'sex' => 'female',
         ]);

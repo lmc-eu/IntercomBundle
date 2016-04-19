@@ -42,6 +42,7 @@ class BulkTest extends AbstractTestCase
                 'John Snow',
                 'john.snow@knows.nothing',
                 $this->dateTime(30480850984),
+                null,
                 [
                     'login_type' => 'email',
                 ]
@@ -50,13 +51,15 @@ class BulkTest extends AbstractTestCase
                 7808,
                 'Mr. Anderson',
                 '',
-                $this->dateTime(49034893084)
+                $this->dateTime(49034893084),
+                null
             ),
             new BulkUser(
                 666,
                 'Darth Vader',
                 null,
                 $this->dateTime(8970384903),
+                null,
                 [
                     'login_type' => 'linkedin',
                 ]
@@ -113,14 +116,5 @@ class BulkTest extends AbstractTestCase
             ->andReturn($result);
 
         $this->assertEquals('job_id_5048', $this->bulk->createUsers($users));
-    }
-
-    /**
-     * @param int $time
-     * @return \DateTime
-     */
-    private function dateTime($time)
-    {
-        return \DateTime::createFromFormat('U', $time);
     }
 }

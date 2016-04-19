@@ -10,4 +10,13 @@ class AbstractTestCase extends \PHPUnit_Framework_TestCase
     {
         m::close();
     }
+
+    /**
+     * @param int $time
+     * @return \DateTime
+     */
+    protected function dateTime($time)
+    {
+        return \DateTime::createFromFormat('U', $time);
+    }
 }
