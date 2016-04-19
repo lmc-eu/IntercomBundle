@@ -1,0 +1,29 @@
+services:
+    intercom.client:
+        class: Intercom\IntercomBasicAuthClient
+        factory: [ Intercom\IntercomBasicAuthClient, factory ]
+        public: false
+        lazy: true
+        arguments:
+            - { app_id: "%intercom.app_id%", api_key: "%intercom.api_key%" }
+
+    intercom.api.bulk:
+        class: IntercomBundle\Service\Bulk
+        factory: [ IntercomBundle\Service\ApiFactory, createBulk]
+        arguments: [ "@intercom.client", "@logger", "%intercom.ignore_errors%" ]
+        public: true
+        lazy: true
+
+    intercom.api.event:
+        class: IntercomBundle\Service\Event
+        factory: [ IntercomBundle\Service\ApiFactory, createEvent]
+        arguments: [ "@intercom.client", "@logger", "%intercom.ignore_errors%" ]
+        public: true
+        lazy: true
+
+    intercom.api.user:
+        class: IntercomBundle\Service\User
+        factory: [ IntercomBundle\Service\ApiFactory, createUser]
+        arguments: [ "@intercom.client", "@logger", "%intercom.ignore_errors%" ]
+        public: true
+        lazy: true
